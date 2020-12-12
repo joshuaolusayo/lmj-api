@@ -47,7 +47,6 @@ app.get("/api", (req, res) => {
 });
 
 // Send contact form to email
-
 app.post("/send", (req, res) => {
 	try {
 		const mailOptions = {
