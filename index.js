@@ -3,11 +3,7 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const transporter = require("./config");
 const mongoose = require("mongoose");
-
-const mailgun = require("mailgun-js")({
-	apiKey: process.env.mailgunApiKey,
-	domain: process.env.mailgunDomain,
-});
+const mailgun = require("mailgun-js")({ apiKey: `${process.env.mailgunApiKey}`, domain: `${process.env.mailgunDomain}` });
 
 const express = require("express");
 const app = express();
@@ -45,7 +41,6 @@ app.get("/api", (req, res) => {
 	article.find({}, (err, data) => {
 		if (err) {
 			res.send("Something went wrong while trying to fetch data");
-			next();
 		}
 		res.json(data);
 	});
