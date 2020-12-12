@@ -1,8 +1,7 @@
 const path = require("path");
+require("dotenv").config();
 const bodyParser = require("body-parser");
 const transporter = require("./config");
-const dotenv = require("dotenv");
-dotenv.config();
 const mongoose = require("mongoose");
 
 const mailgun = require("mailgun-js")({
@@ -117,7 +116,7 @@ app.post("/subscribe", (req, res) => {
 
 if (process.env.NODE_ENV === "production") {
 	// Handle React routing, return all requests to React app
-	app.get("/*", function (req, res) {
+	app.get("*", function (req, res) {
 		res.sendFile(path.join(buildPath, "index.html"));
 	});
 }
