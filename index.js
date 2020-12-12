@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(buildPath)); // Serve any static files
 
 // mongodb set up
-mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(`${process.env.MONGODB_URI}`, { useUnifiedTopology: true, useNewUrlParser: true });
 
 const blogPostSchema = new mongoose.Schema(
 	{
@@ -91,7 +91,7 @@ app.post("/send", (req, res) => {
 
 app.post("/subscribe", (req, res) => {
 	const { email } = req.body;
-	let list = mailgun.lists(process.env.mailgunList);
+	let list = mailgun.lists(`${process.env.mailgunList}`);
 
 	const newMember = {
 		subscribed: true,
