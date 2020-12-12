@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const transporter = require("./config");
 const dotenv = require("dotenv");
 dotenv.config();
+const mongoose = require("mongoose");
 
 const mailgun = require("mailgun-js")({
 	apiKey: process.env.mailgunApiKey,
@@ -12,12 +13,46 @@ const mailgun = require("mailgun-js")({
 const express = require("express");
 const app = express();
 
-const buildPath = path.join(__dirname, "..", "build");
+const buildPath = path.join(__dirname, "build");
 
 // Middleware
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(buildPath));
+app.use(express.static(buildPath)); // Serve any static files
+
+// mongodb set up
+mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
+
+const blogPostSchema = new mongoose.Schema(
+	{
+		date: Date,
+		tag: String,
+		heading: String,
+		image: String,
+		quoteStart: String,
+		quoteStartAuthor: String,
+		quoteEnd: String,
+		quoteEndAuthor: String,
+		intro: String,
+		section: Array,
+	},
+	{ collection: "articles" }
+);
+
+const article = mongoose.model("BlogPost", blogPostSchema);
+
+app.get("/api", (req, res) => {
+	article.find({}, (err, data) => {
+		if (err) {
+			res.send("Something went wrong while trying to fetch data");
+			next();
+		}
+		res.json(data);
+	});
+});
+
+// Send contact form to email
 
 app.post("/send", (req, res) => {
 	try {
@@ -58,6 +93,8 @@ app.post("/send", (req, res) => {
 	}
 });
 
+// get susbscription list
+
 app.post("/subscribe", (req, res) => {
 	const { email } = req.body;
 	let list = mailgun.lists(process.env.mailgunList);
@@ -78,12 +115,13 @@ app.post("/subscribe", (req, res) => {
 	});
 });
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get("*", (req, res) => {
-	res.sendFile(path.join(`${buildPath}/index.html`));
-});
+if (process.env.NODE_ENV === "production") {
+	// Handle React routing, return all requests to React app
+	app.get("/*", function (req, res) {
+		res.sendFile(path.join(buildPath, "index.html"));
+	});
+}
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log("Server running"));
