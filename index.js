@@ -19,7 +19,7 @@ app.use(express.static(buildPath)); // Serve any static files
 
 
 // Send contact form to email
-app.post("/send", (req, res) => {
+app.get("/send", (req, res) => {
 	try {
 		const mailOptions = {
 			from: req.body.email,
@@ -59,7 +59,7 @@ app.post("/send", (req, res) => {
 });
 
 // get susbscription list
-app.post("/subscribe", (req, res) => {
+app.get("/subscribe", (req, res) => {
 	const { email } = req.body;
 	let list = mailgun.lists(`${process.env.mailgunList}`);
 
@@ -87,37 +87,37 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // mongodb set up
-// mongoose
-// 	.connect(`${process.env.MONGODB_URI}`, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
-// 	.then(() => console.log("MongoDB connected..."))
-// 	.catch((err) => console.log(err));
+mongoose
+	.connect(`${process.env.MONGODB_URI}`, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
+	.then(() => console.log("MongoDB connected..."))
+	.catch((err) => console.log(err));
 
-// const blogPostSchema = new mongoose.Schema(
-// 	{
-// 		date: Date,
-// 		tag: String,
-// 		heading: String,
-// 		image: String,
-// 		quoteStart: String,
-// 		quoteStartAuthor: String,
-// 		quoteEnd: String,
-// 		quoteEndAuthor: String,
-// 		intro: String,
-// 		section: Array,
-// 	},
-// 	{ collection: "articles" }
-// );
+const blogPostSchema = new mongoose.Schema(
+	{
+		date: Date,
+		tag: String,
+		heading: String,
+		image: String,
+		quoteStart: String,
+		quoteStartAuthor: String,
+		quoteEnd: String,
+		quoteEndAuthor: String,
+		intro: String,
+		section: Array,
+	},
+	{ collection: "articles" }
+);
 
-// const article = mongoose.model("BlogPost", blogPostSchema);
+const article = mongoose.model("BlogPost", blogPostSchema);
 
-// app.get("/api", (req, res) => {
-// 	article.find({}, (err, data) => {
-// 		if (err) {
-// 			console.log(err);
-// 		}
-// 		res.json(data);
-// 	});
-// });
+app.get("/api", (req, res) => {
+	article.find({}, (err, data) => {
+		if (err) {
+			console.log(err);
+		}
+		res.json(data);
+	});
+});
 
 const PORT = process.env.PORT || 5000;
 
