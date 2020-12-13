@@ -2,7 +2,7 @@ const path = require("path");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const transporter = require("./config");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const mailgun = require("mailgun-js")({ apiKey: `${process.env.mailgunApiKey}`, domain: `${process.env.mailgunDomain}` });
 
 const express = require("express");
