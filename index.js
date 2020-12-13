@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(buildPath)); // Serve any static files
-// console.log(path.join(__dirname, "..", "client", "build"));
 // app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
 
 // Send contact form to email
@@ -94,7 +93,7 @@ mongoose
 
 const blogPostSchema = new mongoose.Schema(
 	{
-		date: Date,
+		date: String,
 		tag: String,
 		heading: String,
 		image: String,
