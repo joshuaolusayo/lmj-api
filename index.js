@@ -15,11 +15,11 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(buildPath)); // Serve any static files
-
-
+// console.log(path.join(__dirname, "..", "client", "build"));
+// app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
 
 // Send contact form to email
-app.get("/send", (req, res) => {
+app.post("/send", (req, res) => {
 	try {
 		const mailOptions = {
 			from: req.body.email,
@@ -59,7 +59,7 @@ app.get("/send", (req, res) => {
 });
 
 // get susbscription list
-app.get("/subscribe", (req, res) => {
+app.post("/subscribe", (req, res) => {
 	const { email } = req.body;
 	let list = mailgun.lists(`${process.env.mailgunList}`);
 
