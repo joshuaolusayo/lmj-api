@@ -17,7 +17,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(buildPath)); // Serve any static files
 
 // mongodb set up
-mongoose.connect(`${process.env.MONGODB_URI}`, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
+mongoose
+	.connect(`${process.env.MONGODB_URI}`, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
+	.then(() => console.log("MongoDB connected..."))
+	.catch((err) => console.log(err));
 
 const blogPostSchema = new mongoose.Schema(
 	{
