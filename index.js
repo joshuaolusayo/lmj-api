@@ -17,7 +17,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(buildPath)); // Serve any static files
 
 // mongodb set up
-mongoose.connect(`mongodb+srv://joshuaolusayo:${process.env.mongoConnectPassword}@lmjblog.8dpjv.mongodb.net/${process.env.mongoDbname}?retryWrites=true&w=majority`, { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(
+	`mongodb+srv://joshuaolusayo:${process.env.mongoConnectPassword}@lmjblog.8dpjv.mongodb.net/${process.env.mongoDbname}?retryWrites=true&w=majority`,
+	{ useUnifiedTopology: true, useNewUrlParser: true }
+);
 
 const blogPostSchema = new mongoose.Schema(
 	{
@@ -40,7 +43,7 @@ const article = mongoose.model("BlogPost", blogPostSchema);
 app.get("/api", (req, res) => {
 	article.find({}, (err, data) => {
 		if (err) {
-			res.send("Something went wrong while trying to fetch data");
+			console.log(err);
 		}
 		res.json(data);
 	});
