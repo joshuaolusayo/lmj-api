@@ -1,6 +1,5 @@
 const path = require("path");
 require("dotenv").config();
-const bodyParser = require("body-parser");
 const transporter = require("./config");
 // const mongoose = require("mongoose");
 const mailgun = require("mailgun-js")({ apiKey: `${process.env.mailgunApiKey}`, domain: `${process.env.mailgunDomain}` });
@@ -12,8 +11,6 @@ const buildPath = path.join(__dirname, "build");
 
 // Middleware
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(buildPath)); //  Serve any static files
 // app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
