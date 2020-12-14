@@ -14,8 +14,9 @@ const buildPath = path.join(__dirname, "build");
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(buildPath)); //  Serve any static files
-// app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
+app.use(express.urlencoded({ extended: false }));
+// app.use(express.static(buildPath)); //  Serve any static files
+app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
 
 // Send contact form to email
 app.post("/send", (req, res) => {
@@ -112,7 +113,7 @@ const article = mongoose.model("BlogPost", blogPostSchema);
 app.get("/api", (req, res) => {
 	article.find({}, (err, data) => {
 		if (err) {
-			console.log(err);
+			console.log(`Error occurrd in node ${err}`);
 		}
 		res.json(data);
 	});
