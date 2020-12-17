@@ -1,7 +1,7 @@
 const path = require("path");
 require("dotenv").config();
 const transporter = require("./config");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const mailgun = require("mailgun-js")({ apiKey: `${process.env.mailgunApiKey}`, domain: `${process.env.mailgunDomain}` });
 
 const express = require("express");
@@ -12,8 +12,8 @@ const buildPath = path.join(__dirname, "build");
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(buildPath)); //  Serve any static files
-// app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
+// app.use(express.static(buildPath)); //  Serve any static files
+app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
 
 // Send contact form to email
 app.post("/send", (req, res) => {
@@ -84,37 +84,37 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // mongodb set up
-// mongoose
-// 	.connect(`${process.env.MONGODB_URI}`, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
-// 	.then(() => console.log("MongoDB connected..."))
-// 	.catch((err) => console.log(err));
+mongoose
+	.connect(`${process.env.MONGODB_URI}`, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
+	.then(() => console.log("MongoDB connected..."))
+	.catch((err) => console.log(err));
 
-// const blogPostSchema = new mongoose.Schema(
-// 	{
-// 		date: String,
-// 		tag: String,
-// 		heading: String,
-// 		image: String,
-// 		quoteStart: String,
-// 		quoteStartAuthor: String,
-// 		quoteEnd: String,
-// 		quoteEndAuthor: String,
-// 		intro: String,
-// 		section: Array,
-// 	},
-// 	{ collection: "articles" }
-// );
+const blogPostSchema = new mongoose.Schema(
+	{
+		date: String,
+		tag: String,
+		heading: String,
+		image: String,
+		quoteStart: String,
+		quoteStartAuthor: String,
+		quoteEnd: String,
+		quoteEndAuthor: String,
+		intro: String,
+		section: Array,
+	},
+	{ collection: "articles" }
+);
 
-// const article = mongoose.model("BlogPost", blogPostSchema);
+const article = mongoose.model("BlogPost", blogPostSchema);
 
-// app.get("/api", (req, res) => {
-// 	article.find({}, (err, data) => {
-// 		if (err) {
-// 			console.log(`Error occurrd in node ${err}`);
-// 		}
-// 		res.json(data);
-// 	});
-// });
+app.get("/api", (req, res) => {
+	article.find({}, (err, data) => {
+		if (err) {
+			console.log(`Error occurrd in node ${err}`);
+		}
+		res.json(data);
+	});
+});
 
 const PORT = process.env.PORT || 5000;
 
