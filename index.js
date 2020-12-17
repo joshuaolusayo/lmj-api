@@ -12,8 +12,8 @@ const buildPath = path.join(__dirname, "build");
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(express.static(buildPath)); //  Serve any static files
-app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
+app.use(express.static(buildPath)); //  Serve any static files
+// app.use(express.static(path.join(__dirname, "..", "client", "build"))); // Serve any static files
 
 // Send contact form to email
 app.post("/send", (req, res) => {
